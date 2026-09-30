@@ -8,16 +8,17 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import com.example.timetable.ui.theme.TimetableTheme
-import kotlin.collections.emptyList
 import androidx.compose.runtime.*
 import com.example.timetable.data.MyModel
-import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,14 +36,20 @@ class MainActivity : ComponentActivity() {
             TimetableTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    snackbarHost = { SnackbarHost(snack) }
+                    snackbarHost = { SnackbarHost(snack) },
+                    floatingActionButton = {
+                        if (model.groupNumber != 0) {
+                            FloatingActionButton({ model.groupNumber = 0 }) {
+                                Icon(Icons.Default.Settings, "")
+                            }
+                        }
+                    }
                 ) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        val weeks by model.lessons(
-                            811,
-                            LocalDate.of(2026, 9, 28)
-                        ).collectAsState(emptyList())
-                        for (w in weeks) Text(w.toString())
+                        if (model.groupNumber == 0)
+                            Groups(model)
+                        else
+                            Timetable(model)
                     }
                 }
             }
