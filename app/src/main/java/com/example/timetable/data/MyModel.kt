@@ -19,4 +19,28 @@ class MyModel(app: Application): AndroidViewModel(app) {
     fun weeks() = flow {
         emit(api.weeks().map { LocalDate.parse(it) })
     }.flowOn(Dispatchers.IO).catch { error = it.message }
+
+    fun groups() = flow {
+        emit(api.groups())
+    }.flowOn(Dispatchers.IO).catch { error = it.message }
+
+    fun teachers() = flow {
+        emit(api.teachers().associate { it.Key to it.Teacher })
+    }.flowOn(Dispatchers.IO).catch { error = it.message }
+
+    fun rooms() = flow {
+        emit(api.rooms())
+    }.flowOn(Dispatchers.IO).catch { error = it.message }
+
+    fun periods() = flow {
+        emit(api.periods().associate { it.Key to it })
+    }.flowOn(Dispatchers.IO).catch { error = it.message }
+
+    fun subjects(group: Int) = flow {
+        emit(api.subjects(group).associate { it.Key to it.Subject })
+    }.flowOn(Dispatchers.IO).catch { error = it.message }
+
+    fun lessons(group: Int, week: LocalDate) = flow {
+        emit(api.lessons(group, week))
+    }.flowOn(Dispatchers.IO).catch { error = it.message }
 }

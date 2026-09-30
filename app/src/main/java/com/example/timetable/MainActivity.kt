@@ -17,6 +17,7 @@ import com.example.timetable.ui.theme.TimetableTheme
 import kotlin.collections.emptyList
 import androidx.compose.runtime.*
 import com.example.timetable.data.MyModel
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +38,10 @@ class MainActivity : ComponentActivity() {
                     snackbarHost = { SnackbarHost(snack) }
                 ) { innerPadding ->
                     Column(Modifier.padding(innerPadding)) {
-                        val weeks by model.weeks().collectAsState(emptyList())
+                        val weeks by model.lessons(
+                            811,
+                            LocalDate.of(2026, 9, 28)
+                        ).collectAsState(emptyList())
                         for (w in weeks) Text(w.toString())
                     }
                 }
