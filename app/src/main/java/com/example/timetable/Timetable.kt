@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,37 +35,53 @@ fun Timetable(model: MyModel) {
     val rooms by remember { model.rooms() }.collectAsState(emptyMap())
     val weeks by remember { model.weeks() }.collectAsState(emptyList())
 
-    val week = weeks.lastOrNull { it <= today } ?: return
-
-    val timetable by remember {
-        model.lessons(groupNumber, week)
-    }.collectAsState(emptyList())
-
-    val days = remember(timetable) { timetable.groupBy { it.Day }.toSortedMap() }
     val full = remember { DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL) }
+    val week = weeks.lastOrNull { it <= today } ?: return
+    val pager = rememberPagerState(weeks.indexOf(week)) { weeks.size }
 
-    LazyColumn(modifier = Modifier.padding(12.dp)) {
-        days.forEach { (day, lessons) ->
-            stickyHeader {
-                Text(week.plusDays(day - 1L).format(full))
-                HorizontalDivider()
-            }
-            items(lessons.sortedBy { it.Pair }) { lesson ->
-                val formattedTime = periods[lesson.Pair]?.Begin
-                    ?.substringBeforeLast(":") ?: ""
+    HorizontalPager(pager) { weekPager ->
+        val timetable by remember {
+            model.lessons(groupNumber, weeks[weekPager])
+        }.collectAsState(emptyList())
+        val days = remember(timetable) { timetable.groupBy { it.Day }.toSortedMap() }
 
-                Column() {
-                    Row() {
-                        Text(formattedTime, Modifier.padding(horizontal = 10.dp))
-                        Text(subjects[lesson.Subj] ?: "")
-                    }
-                    Row() {
-                        Text(rooms[lesson.Room] ?: "", Modifier.padding(horizontal = 10.dp))
-                        Text(teachers[lesson.Teacher] ?: "")
-                    }
+        LazyColumn(modifier = Modifier.padding(12.dp)) {
+            days.forEach { (day, lessons) ->
+                stickyHeader {
+                    Text(weeks[weekPager].plusDays(day - 1L).format(full))
+                    HorizontalDivider()
                 }
-                HorizontalDivider()
+                items(lessons.sortedBy { it.Pair }) { lesson ->
+                    val formattedTime = periods[lesson.Pair]?.Begin
+                        ?.substringBeforeLast(":") ?: ""
+
+                    Column() {
+                        Row() {
+                            Text(formattedTime, Modifier.padding(horizontal = 10.dp))
+                            Text(subjects[lesson.Subj]?.htmlChars() ?: "")
+                        }
+                        Row() {
+                            Text(rooms[lesson.Room] ?: "", Modifier.padding(horizontal = 10.dp))
+                            Text(teachers[lesson.Teacher] ?: "")
+                        }
+                    }
+                    HorizontalDivider()
+                }
             }
         }
+    }
+}
+
+private val regHTML = Regex("&#\\d*;")
+
+@Composable
+private fun String.htmlChars(): String = remember {
+    replace(regHTML) {
+        String(
+            Character.toChars(
+                it.value.substring(2, it.value.length - 1)
+                    .toInt()
+            )
+        )
     }
 }

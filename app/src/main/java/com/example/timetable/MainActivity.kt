@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -45,11 +49,20 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    Column(Modifier.padding(innerPadding)) {
-                        if (model.groupNumber == 0)
-                            Groups(model)
-                        else
+                    Box(Modifier.padding(innerPadding)) {
+                        AnimatedVisibility(model.groupNumber != 0,
+                            Modifier.fillMaxSize(),
+                            slideInVertically { it },
+                            slideOutVertically { it }) {
                             Timetable(model)
+                        }
+
+                        AnimatedVisibility(model.groupNumber == 0,
+                            Modifier.fillMaxSize(),
+                            slideInVertically { -it },
+                            slideOutVertically { -it }) {
+                            Groups(model)
+                        }
                     }
                 }
             }
