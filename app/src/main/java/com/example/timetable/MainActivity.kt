@@ -42,22 +42,22 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = { SnackbarHost(snack) },
                     floatingActionButton = {
-                        if (model.groupNumber != 0) {
-                            FloatingActionButton({ model.groupNumber = 0 }) {
+                        if (model.groupNumber != 0L) {
+                            FloatingActionButton({ model.groupNumber = 0L }) {
                                 Icon(Icons.Default.Settings, "")
                             }
                         }
                     }
                 ) { innerPadding ->
                     Box(Modifier.padding(innerPadding)) {
-                        AnimatedVisibility(model.groupNumber != 0,
+                        AnimatedVisibility(model.groupNumber != 0L,
                             Modifier.fillMaxSize(),
                             slideInVertically { it },
                             slideOutVertically { it }) {
                             Timetable(model)
                         }
 
-                        AnimatedVisibility(model.groupNumber == 0,
+                        AnimatedVisibility(model.groupNumber == 0L,
                             Modifier.fillMaxSize(),
                             slideInVertically { -it },
                             slideOutVertically { -it }) {

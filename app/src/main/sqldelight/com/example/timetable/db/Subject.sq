@@ -1,0 +1,16 @@
+CREATE TABLE Subjects(
+    Key INTEGER PRIMARY KEY AUTOINCREMENT,
+    Subject TEXT NOT NULL,
+    Hours INTEGER NOT NULL,
+    First INTEGER NOT NULL,
+    Grp INTEGER NOT NULL
+);
+
+all:
+SELECT * FROM Subjects WHERE Grp=?;
+
+insert:
+INSERT INTO Subjects(Subject, Hours, First, Grp) VALUES (?, ?, ?, ?);
+
+clear:
+DELETE FROM Subjects;

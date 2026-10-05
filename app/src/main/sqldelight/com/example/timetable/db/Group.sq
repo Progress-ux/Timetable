@@ -1,0 +1,15 @@
+CREATE TABLE Groups(
+    Key INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Year INTEGER NOT NULL,
+    Spec INTEGER NOT NULL
+);
+
+all:
+SELECT * FROM Groups;
+
+insert:
+INSERT INTO Groups(Name, Year, Spec) VALUES (?, ?, ?);
+
+clear:
+DELETE FROM Groups;

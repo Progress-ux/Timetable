@@ -1,0 +1,18 @@
+CREATE TABLE Lessons(
+    Key INTEGER PRIMARY KEY AUTOINCREMENT,
+    Day INTEGER NOT NULL,
+    Pair INTEGER NOT NULL,
+    Subj INTEGER NOT NULL,
+    Teacher INTEGER,
+    Room INTEGER,
+    Grp INTEGER NOT NULL
+);
+
+all:
+SELECT * FROM Lessons WHERE Grp=? AND Day=?;
+
+insert:
+INSERT INTO Lessons(Day, Pair, Subj, Teacher, Room, Grp) VALUES (?, ?, ?, ?, ?, ?);
+
+clear:
+DELETE FROM Lessons;

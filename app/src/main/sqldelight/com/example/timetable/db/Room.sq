@@ -1,0 +1,13 @@
+CREATE TABLE Rooms(
+    Key INTEGER PRIMARY KEY AUTOINCREMENT,
+    UTF TEXT NOT NULL
+);
+
+all:
+SELECT * FROM Rooms;
+
+insert:
+INSERT INTO Rooms(UTF) VALUES (?);
+
+clear:
+DELETE FROM Rooms;

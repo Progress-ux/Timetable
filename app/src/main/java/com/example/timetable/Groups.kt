@@ -40,7 +40,7 @@ fun Groups(model: MyModel) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painterResource(logos[group.Spec] ?: R.drawable.logo2015),
+                    painterResource(logos[group.Spec.toInt()] ?: R.drawable.logo2015),
                     null,
                     modifier = Modifier
                         .padding(start = 12.dp, top = 12.dp, bottom = 12.dp)

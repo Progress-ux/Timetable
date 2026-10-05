@@ -1,0 +1,13 @@
+CREATE TABLE Teachers(
+    Key INTEGER PRIMARY KEY AUTOINCREMENT,
+    Teacher TEXT NOT NULL
+);
+
+all:
+SELECT * FROM Teachers;
+
+insert:
+INSERT INTO Teachers(Teacher) VALUES (?);
+
+clear:
+DELETE FROM Teachers;

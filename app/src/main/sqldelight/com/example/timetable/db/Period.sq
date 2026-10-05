@@ -1,0 +1,16 @@
+CREATE TABLE Periods(
+    Key INTEGER PRIMARY KEY AUTOINCREMENT,
+    Position INTEGER NOT NULL,
+    Begin TEXT NOT NULL,
+    End TEXT NOT NULL
+);
+
+all:
+SELECT * FROM Periods;
+
+insert:
+INSERT INTO Periods(Position, Begin, End) VALUES (?, ?, ?);
+
+clear:
+DELETE FROM Periods;
+
